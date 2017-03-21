@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -11,10 +12,14 @@ public class Prompt : MonoBehaviour {
 
 	private List<PromptMessage> scriptMessages;
 	private int messageIndex;
+	private int hijackCharIndex;
+	private bool hijackInput;
+	private PromptMessage currentMessage;
 
 	void Start () {
 		transcriptComponent.text = "";
 		messageIndex = 0;
+		hijackInput = false;
 
 		messageContainer.ActivateInputField();
 		SetUpScript ();
@@ -28,52 +33,67 @@ public class Prompt : MonoBehaviour {
 		scriptMessages.Add (new PromptMessage (PromptMessage.MessageType.User));
 		scriptMessages.Add (new PromptMessage (PromptMessage.MessageType.Computer, "Testing"));
 		scriptMessages.Add (new PromptMessage (PromptMessage.MessageType.Hijack, "Testing2222222"));
+
 	}
 
 	void OnSubmitMessage () {
-		messageIndex = messageIndex + 1;
-
-		if (messageContainer.text.Length > 0) {
-			if (transcriptComponent.text.Length > 0) {
-				transcriptComponent.text = transcriptComponent.text + "\n" + messageContainer.text;
-			} else {
-				// Concat & newline unnecessary for the first message
-				transcriptComponent.text = messageContainer.text;
-			}
-			messageContainer.text = "";
+		if (messageIndex < scriptMessages.Count) {
+			transcriptComponent.text = messageContainer.text;
+			ProcessReply ();
 		}
-
-		ProcessReply ();
 	}
 
 	void ProcessReply() {
-		PromptMessage currentMessage = scriptMessages [messageIndex];
+		messageIndex = messageIndex + 1;
+
+		currentMessage = scriptMessages [messageIndex];
+		transcriptComponent.text = transcriptComponent.text + "\n";
+
+		messageContainer.ActivateInputField ();
+		messageContainer.text = "";
 
 		switch (currentMessage.messageType) {
 		case PromptMessage.MessageType.Computer:
 			StartCoroutine (TypeText (currentMessage.messageContent));
 			break;
 		case PromptMessage.MessageType.User:
-			messageContainer.ActivateInputField();
+			// Do nothing.
 			break;
-		case PromptMessage.MessageType.Hijack:	
-			HijackUserInput ();
+		case PromptMessage.MessageType.Hijack:
+			hijackInput = true;
+			hijackCharIndex = 0;
+
 			break;
 		}
 	}
 
-	void HijackUserInput() {
-		messageIndex = messageIndex + 1;
+	void Update() {
+		if (hijackInput == true && hijackCharIndex < messageContainer.text.Length) {
+			if ((hijackCharIndex + 1) == currentMessage.messageContent.Length) {
+				hijackInput = false;
+				messageContainer.text = currentMessage.messageContent;
+				ProcessReply ();
+			} else {
+				HijackUserInput ();
+			}
+		}
 
-		ProcessReply ();
+		if (messageIndex >= scriptMessages.Count) {
+			if (Input.GetKeyDown ("return")) {
+				SceneManager.LoadScene ("Level1");
+			} else if (Input.anyKey) {
+				messageContainer.text = currentMessage.messageContent;
+			}
+		}
 	}
+
+	void HijackUserInput() {
+		hijackCharIndex = hijackCharIndex + 1;
 		
+		messageContainer.text = new string (currentMessage.messageContent.ToCharArray (), 0, hijackCharIndex);
+	}
 
 	IEnumerator TypeText (string messageContent) {
-		messageIndex = messageIndex + 1;
-
-		transcriptComponent.text = transcriptComponent.text + "\n";
-
 		foreach (char letter in messageContent.ToCharArray()) {
 			transcriptComponent.text += letter;
 
