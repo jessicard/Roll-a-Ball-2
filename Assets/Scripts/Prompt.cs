@@ -35,8 +35,9 @@ public class Prompt : MonoBehaviour {
 	}
 
 	void OnSubmitMessage () {
+		transcriptComponent.text = transcriptComponent.text + messageContainer.text;
+
 		if (messageIndex < scriptMessages.Count) {
-			transcriptComponent.text = messageContainer.text;
 			ProcessReply ();
 		}
 	}
@@ -82,8 +83,7 @@ public class Prompt : MonoBehaviour {
 
 		if (messageIndex >= scriptMessages.Count) {
 			if (Input.GetKeyDown ("return")) {
-				// TODO: Load next real scene
-				SceneManager.LoadScene ("Level1");
+				StartCoroutine( StartNextScene() );
 			} else if (Input.anyKey) {
 				messageContainer.text = currentMessage.messageContent;
 			}
@@ -93,6 +93,16 @@ public class Prompt : MonoBehaviour {
 	void HijackUserInput() {
 		hijackCharIndex = hijackCharIndex + 1;
 		messageContainer.text = new string (currentMessage.messageContent.ToCharArray (), 0, hijackCharIndex);
+	}
+
+	IEnumerator StartNextScene () {
+		// TODO: Fix this. Needs to clear inputField text when scene prompt scene ends
+		messageContainer.text = "";
+
+		yield return new WaitForSeconds (3.0f);
+
+		// TODO: Load next real scene
+		SceneManager.LoadScene ("Level1");
 	}
 
 	IEnumerator TypeText (string messageContent) {
