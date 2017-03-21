@@ -92,19 +92,14 @@ public class Prompt : MonoBehaviour {
 
 	void HijackUserInput() {
 		hijackCharIndex = hijackCharIndex + 1;
-		
 		messageContainer.text = new string (currentMessage.messageContent.ToCharArray (), 0, hijackCharIndex);
 	}
 
 	IEnumerator TypeText (string messageContent) {
-		
-
 		foreach (char letter in messageContent.ToCharArray()) {
 			transcriptComponent.text += letter;
-
 			yield return new WaitForSeconds (letterPause);
 		}
-
 		ProcessReply ();
 	}
 }
