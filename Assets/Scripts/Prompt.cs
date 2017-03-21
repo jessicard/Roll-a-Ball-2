@@ -5,21 +5,20 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class Prompt : MonoBehaviour {
-	public float letterPause = 0.2f;
+	public float letterPause;
+	public float computerResponsePause;
 	public Text transcriptComponent;
 	public Text messageText;
 	public InputField messageContainer;
 
 	private List<PromptMessage> scriptMessages;
-	private int messageIndex;
-	private int hijackCharIndex;
-	private bool hijackInput;
+	private int messageIndex = 0;
+	private int hijackCharIndex = 0;
+	private bool hijackInput = false;
 	private PromptMessage currentMessage;
 
 	void Start () {
 		transcriptComponent.text = "";
-		messageIndex = 0;
-		hijackInput = false;
 
 		messageContainer.ActivateInputField();
 		SetUpScript ();
@@ -33,7 +32,6 @@ public class Prompt : MonoBehaviour {
 		scriptMessages.Add (new PromptMessage (PromptMessage.MessageType.User));
 		scriptMessages.Add (new PromptMessage (PromptMessage.MessageType.Computer, "Testing"));
 		scriptMessages.Add (new PromptMessage (PromptMessage.MessageType.Hijack, "Testing2222222"));
-
 	}
 
 	void OnSubmitMessage () {
@@ -54,17 +52,20 @@ public class Prompt : MonoBehaviour {
 
 		switch (currentMessage.messageType) {
 		case PromptMessage.MessageType.Computer:
-			StartCoroutine (TypeText (currentMessage.messageContent));
+			StartCoroutine( ReplyAsComputer() );
 			break;
 		case PromptMessage.MessageType.User:
 			// Do nothing.
 			break;
 		case PromptMessage.MessageType.Hijack:
 			hijackInput = true;
-			hijackCharIndex = 0;
-
 			break;
 		}
+	}
+
+	private IEnumerator ReplyAsComputer() {
+		yield return new WaitForSeconds( computerResponsePause );
+		StartCoroutine (TypeText (currentMessage.messageContent));
 	}
 
 	void Update() {
@@ -80,6 +81,7 @@ public class Prompt : MonoBehaviour {
 
 		if (messageIndex >= scriptMessages.Count) {
 			if (Input.GetKeyDown ("return")) {
+				// TODO: Load next real scene
 				SceneManager.LoadScene ("Level1");
 			} else if (Input.anyKey) {
 				messageContainer.text = currentMessage.messageContent;
@@ -94,6 +96,8 @@ public class Prompt : MonoBehaviour {
 	}
 
 	IEnumerator TypeText (string messageContent) {
+		
+
 		foreach (char letter in messageContent.ToCharArray()) {
 			transcriptComponent.text += letter;
 
