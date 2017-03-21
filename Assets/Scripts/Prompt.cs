@@ -52,6 +52,7 @@ public class Prompt : MonoBehaviour {
 
 		switch (currentMessage.messageType) {
 		case PromptMessage.MessageType.Computer:
+			// TODO: Disallow typing while computer is replying
 			StartCoroutine( ReplyAsComputer() );
 			break;
 		case PromptMessage.MessageType.User:
