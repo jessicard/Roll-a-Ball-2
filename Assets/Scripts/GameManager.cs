@@ -23,9 +23,13 @@ public class GameManager : MonoBehaviour {
 
 	void Update() {
 		if (Input.GetKeyDown ("escape")) {
-			Time.timeScale = 0;
-			pausePanel.SetActive (true);
-			paused = true;
+			if (paused == false) {
+				Time.timeScale = 0;
+				pausePanel.SetActive (true);
+				paused = true;
+			} else {
+				UnpauseGame ();
+			}
 		}
 	}
 
