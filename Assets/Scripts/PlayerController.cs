@@ -7,21 +7,33 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour {
 
 	public float speed;
-
 	public Text countText;
 	public GameObject levelHeader;
+
+	public GameObject music;
 
 	private Rigidbody rb;
 	private GameObject[] pickUpObjs;
 	private int count;
 
-	void Start() {
-		levelHeader.SetActive (true);
-		Transform textTransform = levelHeader.transform.FindChild ("Text");
+	void Awake()
+	{
+		if (music != null) {
+			music.transform.GetComponent<AudioSource> ().Play ();
+			DontDestroyOnLoad (music);
+		}
+	}
 
-		textTransform.GetComponent<Text>().text = textTransform.GetComponent<Text>().text + " " + SceneManager.GetActiveScene().buildIndex.ToString(); 
-		// Pause gameplay
-		Invoke("DismissLevelHeader", 2);
+	void Start() {
+		if (SceneManager.GetActiveScene ().name != "Level1") {
+			levelHeader.SetActive (true);
+			Transform textTransform = levelHeader.transform.FindChild ("Text");
+
+			textTransform.GetComponent<Text>().text = textTransform.GetComponent<Text>().text + " " + SceneManager.GetActiveScene().buildIndex.ToString(); 
+
+			// TODO: Pause gameplay
+			Invoke("DismissLevelHeader", 2);
+		}
 			
 		pickUpObjs = GameObject.FindGameObjectsWithTag ("Pick Up");
 		rb = GetComponent<Rigidbody>();
@@ -62,7 +74,7 @@ public class PlayerController : MonoBehaviour {
 		countText.text = "Count: " + count.ToString ();
 
 		if (count == pickUpObjs.Length) {
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+			SceneManager.LoadScene(SceneManager.GetActiveScene ().buildIndex + 1);
 		}
 	}
 }
