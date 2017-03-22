@@ -10,6 +10,7 @@ public class Prompt : MonoBehaviour {
 	public Text transcriptComponent;
 	public Text messageText;
 	public InputField messageContainer;
+	public GameObject typeSound;
 
 	private List<PromptMessage> scriptMessages;
 	private int messageIndex = 0;
@@ -35,6 +36,16 @@ public class Prompt : MonoBehaviour {
 	}
 
 	void OnSubmitMessage () {
+		if (Input.GetMouseButtonDown(0) 
+			|| Input.GetMouseButtonDown(1)
+			|| Input.GetMouseButtonDown(2))
+			return;
+
+		// TODO: Don't allow submission on hijack if the full message hasnt been typed
+//		if (currentMessage.messageType == PromptMessage.MessageType.Hijack &&
+//		    currentMessage.messageContent.Length > messageText.text.Length)
+//			return;
+		
 		transcriptComponent.text = transcriptComponent.text + messageContainer.text;
 
 		if (messageIndex < scriptMessages.Count) {
@@ -71,6 +82,16 @@ public class Prompt : MonoBehaviour {
 	}
 
 	void Update() {
+		if (Input.anyKeyDown) {
+			if (Input.GetMouseButtonDown(0) 
+				|| Input.GetMouseButtonDown(1)
+				|| Input.GetMouseButtonDown(2))
+				return;
+
+			// TODO: Don't allow typing noises on hijack if the full message has been typed
+			typeSound.transform.GetComponent<AudioSource> ().Play ();
+		}
+
 		if (hijackInput == true && hijackCharIndex < messageContainer.text.Length) {
 			if ((hijackCharIndex + 1) == currentMessage.messageContent.Length) {
 				hijackInput = false;
@@ -84,7 +105,12 @@ public class Prompt : MonoBehaviour {
 		if (messageIndex >= scriptMessages.Count) {
 			if (Input.GetKeyDown ("return")) {
 				StartCoroutine( StartNextScene() );
-			} else if (Input.anyKey) {
+			} else if (Input.anyKeyDown) {
+				if (Input.GetMouseButtonDown(0) 
+					|| Input.GetMouseButtonDown(1)
+					|| Input.GetMouseButtonDown(2))
+					return;
+				
 				messageContainer.text = currentMessage.messageContent;
 			}
 		}
@@ -108,6 +134,7 @@ public class Prompt : MonoBehaviour {
 	IEnumerator TypeText (string messageContent) {
 		foreach (char letter in messageContent.ToCharArray()) {
 			transcriptComponent.text += letter;
+			typeSound.transform.GetComponent<AudioSource> ().Play ();
 			yield return new WaitForSeconds (letterPause);
 		}
 		ProcessReply ();

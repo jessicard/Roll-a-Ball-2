@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void TriggerLoss () {
-		StartCoroutine( LoadMenu() );
+		StartCoroutine( DisplayLossPanel() );
 	}
 
 	void UnpauseGame () {
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
 		SceneManager.LoadScene("Menu");
 	}
 
-	IEnumerator LoadMenu () {
+	IEnumerator DisplayLossPanel () {
 		lossPanel.SetActive (true);
 		yield return new WaitForSeconds (3.0f);
 		QuitToMenu ();
