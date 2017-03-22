@@ -46,12 +46,6 @@ public class PlayerController : MonoBehaviour {
 		levelHeader.SetActive (false);
 	}
 
-	void Update() {
-		if (Input.GetKey ("escape")) {
-			SceneManager.LoadScene("_Menu");
-		}
-	}
-
 	void FixedUpdate() {
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");

@@ -18,7 +18,7 @@ public class Timer : MonoBehaviour {
 		timerText.text = (int.Parse (timerText.text) - 1).ToString ();
 
 		if (timerText.text == "0") {
-			SceneManager.LoadScene("_Menu");
+			GameObject.Find("GameManager").GetComponent<GameManager>().TriggerLoss ();
 		}
 	}
 }
