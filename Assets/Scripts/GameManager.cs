@@ -6,16 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 	public GameObject lossPanel;
+	public GameObject pausePanel;
+
+	private bool paused = false;
 
 	void Update() {
-		if (Input.GetKey ("escape")) {
-			// TODO: Check if they're sure they want to quit
-			SceneManager.LoadScene("Menu");
-		}
-
-		if (Input.GetKey ("space")) {
-			// TODO: Space bar to pause the game
-			Debug.Log("pause");
+		if (paused == true) {
+			if (Input.anyKeyDown == true) {
+				paused = false;
+				Time.timeScale = 1;
+				pausePanel.SetActive (false);
+			}
+		} else {
+			if (Input.GetKeyDown ("escape")) {
+				Time.timeScale = 0;
+				pausePanel.SetActive (true);
+				paused = true;
+			}
 		}
 	}
 

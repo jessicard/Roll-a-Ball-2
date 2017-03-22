@@ -17,11 +17,17 @@ public class MenuManager : MonoBehaviour {
 		Button startBtn = startButton.GetComponent<Button>();
 		Button exitBtn = exitButton.GetComponent<Button>();
 
-		startBtn.onClick.AddListener(LoadLevel);
+		startBtn.onClick.AddListener(LoadFirstLevel);
 		exitBtn.onClick.AddListener(QuitGame);
 	}
 
-	void LoadLevel () {
+	void Update() {
+		if (Input.GetKey ("escape")) {
+			QuitGame ();
+		}
+	}
+
+	void LoadFirstLevel () {
 		SceneManager.LoadScene("Level1");
 	}
 
