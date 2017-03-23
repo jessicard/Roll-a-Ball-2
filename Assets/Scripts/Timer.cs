@@ -11,6 +11,11 @@ public class Timer : MonoBehaviour {
 
 	void Start () {
 		timerText.text = timerSeconds.ToString ();
+
+		Invoke("StartTimer", (BallSceneManager.levelHeaderDelay + 1));
+	}
+
+	void StartTimer() {
 		InvokeRepeating ("IncrementTimer", 0f, 1.0f);
 	}
 	

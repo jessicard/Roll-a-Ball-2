@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class BallSceneManager : MonoBehaviour {
 	public GameObject levelHeader;
+	public static int levelHeaderDelay = 2;
 
 	void Start () {
 		MusicManager.Play ("Audio/Analog-Nostalgia");
@@ -16,8 +17,7 @@ public class BallSceneManager : MonoBehaviour {
 
 			textTransform.GetComponent<Text>().text = textTransform.GetComponent<Text>().text + " " + SceneManager.GetActiveScene().buildIndex.ToString(); 
 
-			// TODO: Pause gameplay
-			Invoke("DismissLevelHeader", 2);
+			Invoke("DismissLevelHeader", levelHeaderDelay);
 		}
 	}
 
