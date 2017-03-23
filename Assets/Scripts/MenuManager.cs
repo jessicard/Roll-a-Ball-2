@@ -10,7 +10,7 @@ public class MenuManager : MonoBehaviour {
 	public Button exitButton;
 
 	void Start () {
-		MusicManager.GetInstance ().Play ("Audio/Analog-Nostalgia");
+		MusicManager.GetInstance ().Play ("Audio/Disturbed-Soundscape");
 
 		Button startBtn = startButton.GetComponent<Button>();
 		Button exitBtn = exitButton.GetComponent<Button>();

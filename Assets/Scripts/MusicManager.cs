@@ -6,12 +6,15 @@ public class MusicManager : MonoBehaviour {
 	static private MusicManager instance;
 
 	static public MusicManager GetInstance() {
-		GameObject gameObject = new GameObject();
+		if (instance == null) {
+			GameObject gameObject = new GameObject();
+			DontDestroyOnLoad (gameObject);
 
-		gameObject.AddComponent<AudioSource>();
-		gameObject.AddComponent<MusicManager>();
+			gameObject.AddComponent<AudioSource>();
+			gameObject.AddComponent<MusicManager>();
 
-		instance = gameObject.GetComponent<MusicManager>();
+			instance = gameObject.GetComponent<MusicManager>();	
+		}
 
 		return instance;
 	}
@@ -24,10 +27,9 @@ public class MusicManager : MonoBehaviour {
 			return;
 		}
 		
-		if (this.GetComponent<AudioSource>().clip != audioClip) {
+		if (!this.GetComponent<AudioSource>().clip || (this.GetComponent<AudioSource>().clip.name != audioClip.name)) {
 			this.GetComponent<AudioSource>().clip = audioClip;
+			this.GetComponent<AudioSource>().Play ();
 		}
-			
-		this.GetComponent<AudioSource>().Play ();
 	}
 }

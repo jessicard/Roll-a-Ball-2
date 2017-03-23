@@ -10,21 +10,13 @@ public class PlayerController : MonoBehaviour {
 	public Text countText;
 	public GameObject levelHeader;
 
-	public GameObject music;
-
 	private Rigidbody rb;
 	private GameObject[] pickUpObjs;
 	private int count;
 
-	void Awake()
-	{
-		if (music != null) {
-			music.transform.GetComponent<AudioSource> ().Play ();
-			DontDestroyOnLoad (music);
-		}
-	}
-
 	void Start() {
+		MusicManager.GetInstance ().Play ("Audio/Analog-Nostalgia");
+
 		if (SceneManager.GetActiveScene ().name != "Level1") {
 			levelHeader.SetActive (true);
 			Transform textTransform = levelHeader.transform.FindChild ("Text");
