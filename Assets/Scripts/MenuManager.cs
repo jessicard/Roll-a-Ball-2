@@ -9,11 +9,9 @@ public class MenuManager : MonoBehaviour {
 	public Button startButton;
 	public Button exitButton;
 
-	void Awake() {
-		// TODO: Turn off any other music playing
-	}
-
 	void Start () {
+		MusicManager.GetInstance ().Play ("Audio/Analog-Nostalgia");
+
 		Button startBtn = startButton.GetComponent<Button>();
 		Button exitBtn = exitButton.GetComponent<Button>();
 
