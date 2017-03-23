@@ -19,6 +19,8 @@ public class Prompt : MonoBehaviour {
 	private PromptMessage currentMessage;
 
 	void Start () {
+		MusicManager.Play ("Audio/MechDrone1");
+
 		transcriptComponent.text = "";
 
 		messageContainer.ActivateInputField();

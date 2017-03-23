@@ -5,31 +5,31 @@ using UnityEngine;
 public class MusicManager : MonoBehaviour {
 	static private MusicManager instance;
 
-	static public MusicManager GetInstance() {
-		if (instance == null) {
-			GameObject gameObject = new GameObject();
-			DontDestroyOnLoad (gameObject);
+	static void SetInstance() {
+		GameObject gameObject = new GameObject();
+		DontDestroyOnLoad (gameObject);
 
-			gameObject.AddComponent<AudioSource>();
-			gameObject.AddComponent<MusicManager>();
+		gameObject.AddComponent<AudioSource>();
+		gameObject.AddComponent<MusicManager>();
 
-			instance = gameObject.GetComponent<MusicManager>();	
-		}
-
-		return instance;
+		instance = gameObject.GetComponent<MusicManager>();	
 	}
 
-	public void Play(string path) {
+	static public void Play(string path) {
 		AudioClip audioClip = Resources.Load<AudioClip> (path);
 
 		if (!audioClip) {
 			Debug.Log ("Audio clip does not exist at this path.");
 			return;
 		}
+
+		if (!instance) {
+			SetInstance ();
+		}
 		
-		if (!this.GetComponent<AudioSource>().clip || (this.GetComponent<AudioSource>().clip.name != audioClip.name)) {
-			this.GetComponent<AudioSource>().clip = audioClip;
-			this.GetComponent<AudioSource>().Play ();
+		if (!instance.GetComponent<AudioSource>().clip || (instance.GetComponent<AudioSource>().clip.name != audioClip.name)) {
+			instance.GetComponent<AudioSource>().clip = audioClip;
+			instance.GetComponent<AudioSource>().Play ();
 		}
 	}
 }

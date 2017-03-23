@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
 	private int count;
 
 	void Start() {
-		MusicManager.GetInstance ().Play ("Audio/Analog-Nostalgia");
+		MusicManager.Play ("Audio/Analog-Nostalgia");
 
 		if (SceneManager.GetActiveScene ().name != "Level1") {
 			levelHeader.SetActive (true);
