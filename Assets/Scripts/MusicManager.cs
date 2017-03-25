@@ -29,6 +29,7 @@ public class MusicManager : MonoBehaviour {
 		
 		if (!instance.GetComponent<AudioSource>().clip || (instance.GetComponent<AudioSource>().clip.name != audioClip.name)) {
 			instance.GetComponent<AudioSource>().clip = audioClip;
+			instance.GetComponent<AudioSource>().loop = true;
 			instance.GetComponent<AudioSource>().Play ();
 		}
 	}
