@@ -64,6 +64,13 @@ public class Prompt : MonoBehaviour {
 		messageContainer.ActivateInputField ();
 		messageContainer.text = "";
 
+//		float newMessageContainerPosY = -(transcriptComponent.transform.GetComponent<RectTransform>().rect.height) - 10;
+//		Vector3 newMessageContainerPosY = messageContainer.transform.GetComponent<RectTransform>().position;
+
+		Debug.Log (newMessageContainerPosY);
+
+//		messageContainer.transform.GetComponent<RectTransform>().anchoredPosition = new Vector3 (0, newMessageContainerPosY, 0);
+
 		switch (currentMessage.messageType) {
 		case PromptMessage.MessageType.Computer:
 			// TODO: Disallow typing while computer is replying
